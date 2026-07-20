@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <span class="brand-badge">Finance Pulse</span>
+        <h1>Expense Tracker</h1>
+        <p>Track every rupee with a bold, modern look.</p>
+    </header>
+
+    <main>
+
+        <!-- Summary Cards -->
+        <section class="summary">
+
+            <div class="card">
+                <h3>Balance</h3>
+                <p id="balance">Rs. 0</p>
+            </div>
+
+            <div class="card">
+                <h3>Income</h3>
+                <p id="income">Rs. 0</p>
+            </div>
+
+            <div class="card">
+                <h3>Expense</h3>
+                <p id="expense">Rs. 0</p>
+            </div>
+
+        </section>
+
+        <!-- Transaction Form -->
+        <section class="transaction-form">
+
+            <h2>Add Transaction</h2>
+
+            <!-- Amount -->
+            <input
+                type="number"
+                id="amount"
+                placeholder="Enter Amount">
+
+            <!-- Income / Expense -->
+            <select id="type">
+                <option value="Income">Income</option>
+                <option value="Expense">Expense</option>
+            </select>
+
+            <!-- Category -->
+            <input
+                type="text"
+                id="category"
+                placeholder="Enter Category">
+
+            <!-- Date -->
+            <input
+                type="date"
+                id="date">
+
+            <!-- Note -->
+            <textarea
+                id="note"
+                placeholder="Write a Note"></textarea>
+
+            <p id="statusMessage" class="status-message" aria-live="polite"></p>
+
+            <!-- Button -->
+            <button id="addBtn">
+                Add Transaction
+            </button>
+
+        </section>
+
+        <!-- Transactions -->
+        <section class="transactions">
+
+            <h2>Transactions</h2>
+
+            <!-- JavaScript will add transactions here -->
+            <div id="transactionList">
+
+                <p>No Transactions Yet</p>
+
+            </div>
+
+        </section>
+
+        <!-- Charts -->
+        <section class="charts">
+
+            <h2>Analytics</h2>
+
+            <div class="chart-box">
+                Expense by Category
+            </div>
+
+            <div class="chart-box">
+                Monthly Expenses
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
