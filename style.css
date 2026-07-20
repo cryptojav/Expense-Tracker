@@ -1,13 +1,14 @@
 :root {
-    --bg: #050505;
-    --surface: #111111;
-    --surface-2: #181818;
-    --text: #fdfdfd;
-    --muted: #b7b7b7;
-    --accent: #ffdd00;
-    --accent-strong: #ffd11a;
-    --income: #5ee7b7;
-    --expense: #ff6b6b;
+    --bg: #06020f;
+    --surface: rgba(15, 10, 33, 0.95);
+    --surface-2: rgba(30, 19, 58, 0.95);
+    --text: #f7f4ff;
+    --muted: #bdaee8;
+    --accent: #b469ff;
+    --accent-strong: #7c3aed;
+    --accent-soft: rgba(180, 105, 255, 0.16);
+    --income: #58f0c4;
+    --expense: #ff72b8;
 }
 
 * {
@@ -17,10 +18,11 @@
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Poppins", "Segoe UI", sans-serif;
     background:
-        radial-gradient(circle at top left, rgba(255, 221, 0, 0.12), transparent 25%),
-        linear-gradient(135deg, #030303 0%, #0f0f0f 100%);
+        radial-gradient(circle at top left, rgba(180, 105, 255, 0.24), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(95, 214, 255, 0.12), transparent 24%),
+        linear-gradient(135deg, #04010a 0%, #120423 55%, #090611 100%);
     color: var(--text);
     padding: 24px;
     min-height: 100vh;
@@ -48,42 +50,45 @@ body {
 .cursor-ring {
     width: 38px;
     height: 38px;
-    border: 1px solid rgba(255, 221, 0, 0.85);
+    border: 1px solid rgba(180, 105, 255, 0.95);
     border-radius: 50%;
-    transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-    box-shadow: 0 0 18px rgba(255, 221, 0, 0.26);
+    transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 0 20px rgba(180, 105, 255, 0.24);
 }
 
 .cursor-ring.hovering {
-    width: 54px;
-    height: 54px;
-    border-color: #fff3a6;
+    width: 56px;
+    height: 56px;
+    border-color: #dcbaff;
+    box-shadow: 0 0 28px rgba(180, 105, 255, 0.42);
 }
 
 .cursor-dot {
-    width: 8px;
-    height: 8px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 14px rgba(255, 221, 0, 0.75);
+    background: linear-gradient(135deg, #e0b7ff, var(--accent));
+    box-shadow: 0 0 16px rgba(180, 105, 255, 0.8);
     transition: transform 0.12s ease, width 0.2s ease, height 0.2s ease;
 }
 
 .cursor-dot.clicking {
-    width: 12px;
-    height: 12px;
+    width: 13px;
+    height: 13px;
 }
 
 .cursor-effect {
     position: fixed;
-    width: 12px;
-    height: 12px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 221, 0, 0.95), rgba(255, 221, 0, 0));
+    background: radial-gradient(circle, rgba(224, 183, 255, 0.95) 0%, rgba(180, 105, 255, 0.25) 48%, rgba(0, 0, 0, 0) 72%);
     pointer-events: none;
     z-index: 9998;
-    animation: spark 0.65s ease-out forwards;
+    animation: spark 0.7s ease-out forwards;
     transform: translate(-50%, -50%);
+    filter: blur(2px);
+    box-shadow: 0 0 24px rgba(180, 105, 255, 0.24);
 }
 
 body::before,
@@ -93,7 +98,7 @@ body::after {
     width: 280px;
     height: 280px;
     border-radius: 50%;
-    background: rgba(255, 221, 0, 0.1);
+    background: rgba(180, 105, 255, 0.16);
     filter: blur(60px);
     z-index: 0;
     animation: float 8s ease-in-out infinite;
@@ -125,9 +130,9 @@ header {
     display: inline-block;
     padding: 8px 14px;
     border-radius: 999px;
-    border: 1px solid rgba(255, 221, 0, 0.35);
-    background: rgba(255, 221, 0, 0.1);
-    color: var(--accent);
+    border: 1px solid rgba(180, 105, 255, 0.35);
+    background: rgba(180, 105, 255, 0.12);
+    color: #dcb7ff;
     font-size: 0.8rem;
     letter-spacing: 0.24em;
     text-transform: uppercase;
@@ -164,10 +169,10 @@ main {
 .transactions,
 .charts {
     background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
-    border: 1px solid rgba(255, 221, 0, 0.2);
+    border: 1px solid rgba(180, 105, 255, 0.22);
     border-radius: 20px;
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
+    box-shadow: 0 16px 50px rgba(4, 2, 12, 0.42);
+    backdrop-filter: blur(12px);
 }
 
 .card {
@@ -183,15 +188,15 @@ main {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255, 221, 0, 0.08), transparent);
+    background: linear-gradient(90deg, transparent, rgba(180, 105, 255, 0.08), transparent);
     transform: translateX(-100%);
     transition: transform 0.4s ease;
 }
 
 .card:hover {
     transform: translateY(-6px) scale(1.01);
-    box-shadow: 0 20px 45px rgba(255, 221, 0, 0.12);
-    border-color: rgba(255, 221, 0, 0.5);
+    box-shadow: 0 24px 50px rgba(180, 105, 255, 0.16);
+    border-color: rgba(180, 105, 255, 0.44);
 }
 
 button:hover,
@@ -250,10 +255,10 @@ textarea,
     width: 100%;
     padding: 12px 14px;
     margin-bottom: 14px;
-    border: 1px solid rgba(255, 221, 0, 0.2);
+    border: 1px solid rgba(180, 105, 255, 0.24);
     border-radius: 12px;
     font-size: 16px;
-    background: #0d0d0d;
+    background: rgba(7, 4, 15, 0.9);
     color: var(--text);
     transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
@@ -263,7 +268,7 @@ textarea,
 .transaction-form textarea:focus {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(255, 221, 0, 0.16);
+    box-shadow: 0 0 0 3px rgba(180, 105, 255, 0.16);
     transform: translateY(-1px);
 }
 
@@ -289,19 +294,19 @@ textarea,
     width: 100%;
     padding: 14px;
     background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-    color: #050505;
+    color: #fdf8ff;
     border: none;
     border-radius: 999px;
     cursor: pointer;
     font-size: 17px;
     font-weight: 700;
-    box-shadow: 0 10px 20px rgba(255, 221, 0, 0.2);
+    box-shadow: 0 12px 24px rgba(124, 58, 237, 0.28);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .transaction-form button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 14px 24px rgba(255, 221, 0, 0.28);
+    box-shadow: 0 16px 28px rgba(124, 58, 237, 0.35);
 }
 
 .transaction-form button::before {
@@ -309,7 +314,7 @@ textarea,
     position: absolute;
     inset: 0;
     border-radius: 999px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
     transform: translateX(-100%);
     transition: transform 0.45s ease;
 }
@@ -336,10 +341,10 @@ textarea,
 .empty-state {
     padding: 16px;
     border-radius: 14px;
-    border: 1px dashed rgba(255, 221, 0, 0.35);
+    border: 1px dashed rgba(180, 105, 255, 0.35);
     text-align: center;
     color: var(--muted);
-    background: rgba(255, 221, 0, 0.05);
+    background: rgba(180, 105, 255, 0.06);
 }
 
 .transaction-item {
@@ -350,7 +355,7 @@ textarea,
     padding: 14px 16px;
     border-radius: 14px;
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 221, 0, 0.16);
+    border: 1px solid rgba(180, 105, 255, 0.16);
     animation: slideInRight 0.45s ease both;
 }
 
@@ -379,7 +384,7 @@ textarea,
 
 .chart-box {
     min-height: 210px;
-    border: 1px solid rgba(255, 221, 0, 0.16);
+    border: 1px solid rgba(180, 105, 255, 0.16);
     margin-top: 18px;
     padding: 20px;
     border-radius: 16px;
@@ -389,7 +394,7 @@ textarea,
     gap: 10px;
     color: var(--text);
     font-size: 18px;
-    background: linear-gradient(135deg, rgba(255, 221, 0, 0.1), rgba(255, 255, 255, 0.03));
+    background: linear-gradient(135deg, rgba(180, 105, 255, 0.1), rgba(255, 255, 255, 0.03));
     position: relative;
     overflow: hidden;
 }
@@ -401,7 +406,7 @@ textarea,
     width: 160px;
     height: 160px;
     border-radius: 50%;
-    background: rgba(255, 221, 0, 0.12);
+    background: rgba(180, 105, 255, 0.12);
     filter: blur(20px);
 }
 
@@ -444,7 +449,7 @@ textarea,
     }
     100% {
         opacity: 0;
-        transform: translate(-50%, -50%) scale(2.2);
+        transform: translate(-50%, -50%) scale(2.45);
     }
 }
 
@@ -466,4 +471,23 @@ textarea,
         flex-direction: column;
         align-items: flex-start;
     }
+}
+
+.delete-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, var(--expense), #ff4d8a);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.delete-btn:hover {
+    background: linear-gradient(135deg, #ff4d8a, #ff2f71);
+    transform: scale(1.05);
 }
