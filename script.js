@@ -29,6 +29,7 @@ const expense = document.getElementById("expense");
 
 const transactionList = document.getElementById("transactionList");
 const statusMessage = document.getElementById("statusMessage");
+const searchInput = document.getElementById("searchInput");
 
 // ==========================================
 // APP DATA
@@ -244,13 +245,27 @@ function loadTransactions() {
 // RENDER TRANSACTIONS
 // ==========================================
 
-function renderTransactions() {
+function renderTransactions(searchText = "") {
 
-    if (transactions.length === 0) {
+    let filteredTransactions = transactions.filter(function (transaction) {
+
+        return (
+            transaction.category
+                .toLowerCase()
+                .includes(searchText.toLowerCase()) ||
+
+            transaction.note
+                .toLowerCase()
+                .includes(searchText.toLowerCase())
+        );
+
+    });
+
+    if (filteredTransactions.length === 0) {
 
         transactionList.innerHTML = `
             <div class="empty-state">
-                No transactions yet.
+                No matching transactions found.
             </div>
         `;
 
@@ -258,7 +273,7 @@ function renderTransactions() {
 
     }
 
-    transactionList.innerHTML = transactions
+    transactionList.innerHTML = filteredTransactions
         .slice()
         .reverse()
         .map(function (transaction) {
@@ -312,31 +327,23 @@ function renderTransactions() {
 
     attachCursorHoverListeners(transactionList);
 
-    // EDIT BUTTONS
-
     document.querySelectorAll(".edit-btn")
         .forEach(function (button) {
 
             button.addEventListener("click", function () {
 
-                editTransaction(
-                    Number(button.dataset.id)
-                );
+                editTransaction(Number(button.dataset.id));
 
             });
 
         });
-
-    // DELETE BUTTONS
 
     document.querySelectorAll(".delete-btn")
         .forEach(function (button) {
 
             button.addEventListener("click", function () {
 
-                deleteTransaction(
-                    Number(button.dataset.id)
-                );
+                deleteTransaction(Number(button.dataset.id));
 
             });
 
@@ -537,6 +544,16 @@ addButton.addEventListener("click", function () {
     void addButton.offsetWidth;
 
     addButton.classList.add("success-pulse");
+
+});
+
+// ==========================================
+// SEARCH TRANSACTIONS
+// ==========================================
+
+searchInput.addEventListener("keyup", function () {
+
+    renderTransactions(searchInput.value);
 
 });
 
