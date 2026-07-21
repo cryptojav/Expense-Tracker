@@ -6,9 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Tracker</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -76,11 +73,17 @@
                 id="note"
                 placeholder="Write a Note"></textarea>
 
-            <p id="statusMessage" class="status-message" aria-live="polite"></p>
+            <p id="statusMessage" class="status-message"></p>
 
-            <!-- Button -->
+            <!-- Buttons -->
             <button id="addBtn">
                 Add Transaction
+            </button>
+
+            <button
+                id="cancelEditBtn"
+                style="display:none; margin-top:10px; background:#666;">
+                Cancel Edit
             </button>
 
         </section>
@@ -90,10 +93,11 @@
 
             <h2>Transactions</h2>
 
-            <!-- JavaScript will add transactions here -->
             <div id="transactionList">
 
-                <p>No Transactions Yet</p>
+                <div class="empty-state">
+                    No transactions yet. Add your first transaction.
+                </div>
 
             </div>
 

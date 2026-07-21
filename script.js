@@ -1,6 +1,5 @@
-// ================================
-// Input Fields
-// ================================
+
+// INPUT FIELDS
 
 const amountInput = document.getElementById("amount");
 const typeInput = document.getElementById("type");
@@ -8,34 +7,30 @@ const categoryInput = document.getElementById("category");
 const dateInput = document.getElementById("date");
 const noteInput = document.getElementById("note");
 
-// ================================
-// Button
-// ================================
+// BUTTONS
 
 const addButton = document.getElementById("addBtn");
+const cancelEditBtn = document.getElementById("cancelEditBtn");
 
-// ================================
-// Summary Cards
-// ================================
+// SUMMARY
 
 const balance = document.getElementById("balance");
 const income = document.getElementById("income");
 const expense = document.getElementById("expense");
 
-// ================================
-// Transaction List
-// ================================
+// TRANSACTION LIST
 
 const transactionList = document.getElementById("transactionList");
 const statusMessage = document.getElementById("statusMessage");
 
-// ================================
-// Store Transactions
-// ================================
+// APP DATA
 
 let transactions = [];
 
-// Custom Cursor
+// stores id of transaction currently.
+let editId = null;
+
+// CUSTOM CURSOR
 
 const cursorRing = document.createElement("div");
 cursorRing.className = "cursor-ring";
@@ -47,10 +42,12 @@ document.body.appendChild(cursorDot);
 
 let mouseX = window.innerWidth / 2;
 let mouseY = window.innerHeight / 2;
+
 let ringX = mouseX;
 let ringY = mouseY;
 
 function animateCursor() {
+
     ringX += (mouseX - ringX) * 0.16;
     ringY += (mouseY - ringY) * 0.16;
 
@@ -61,101 +58,166 @@ function animateCursor() {
     cursorDot.style.top = `${mouseY}px`;
 
     requestAnimationFrame(animateCursor);
+
 }
 
 animateCursor();
 
-document.addEventListener("mousemove", (event) => {
+document.addEventListener("mousemove", function (event) {
 
     mouseX = event.clientX;
     mouseY = event.clientY;
 
-    const hoverTarget = event.target instanceof Element
-        ? event.target.closest("button, input, select, textarea, .card, .transaction-item, a")
-        : null;
-
-    cursorRing.classList.toggle("hovering", Boolean(hoverTarget));
-
     const spark = document.createElement("span");
 
     spark.className = "cursor-effect";
+
     spark.style.left = `${event.clientX}px`;
     spark.style.top = `${event.clientY}px`;
 
     document.body.appendChild(spark);
 
-    setTimeout(() => {
+    setTimeout(function () {
+
         spark.remove();
-    }, 700);
+
+    }, 650);
 
 });
 
-document.addEventListener("mouseleave", () => {
-    cursorRing.classList.remove("hovering");
-});
+document.addEventListener("mousedown", function () {
 
-document.addEventListener("mousedown", () => {
     cursorDot.classList.add("clicking");
+
 });
 
-document.addEventListener("mouseup", () => {
+document.addEventListener("mouseup", function () {
+
     cursorDot.classList.remove("clicking");
+
 });
 
-// Render Transactions
+// STATUS MESSAGE
+
+function showStatus(message) {
+
+    statusMessage.textContent = message;
+
+    statusMessage.classList.add("show");
+
+    clearTimeout(showStatus.timeout);
+
+    showStatus.timeout = setTimeout(function () {
+
+        statusMessage.classList.remove("show");
+
+    }, 1800);
+
+}
+
+// CLEAR FORM
+
+function clearForm() {
+
+    amountInput.value = "";
+    typeInput.value = "Income";
+    categoryInput.value = "";
+    dateInput.value = "";
+    noteInput.value = "";
+
+}
+
+// RENDER TRANSACTIONS
 
 function renderTransactions() {
 
     if (transactions.length === 0) {
 
         transactionList.innerHTML = `
-            <p class="empty-state">
-                No transactions yet. Add your first move.
-            </p>
+            <div class="empty-state">
+                No transactions yet.
+            </div>
         `;
 
         return;
+
     }
 
     transactionList.innerHTML = transactions
         .slice()
         .reverse()
-        .map((transaction) => `
-        
-        <div class="transaction-item ${transaction.type.toLowerCase()}">
+        .map(function (transaction) {
 
-            <div>
+            return `
 
-                <strong>${transaction.category}</strong>
+            <div class="transaction-item ${transaction.type.toLowerCase()}">
 
-                <p>${transaction.note || "No note added"}</p>
+                <div>
 
-                <small>${transaction.date}</small>
+                    <strong>${transaction.category}</strong>
 
-            </div>
+                    <p>${transaction.note}</p>
 
-            <div>
+                    <small>${transaction.date}</small>
 
-                <div class="amount">
-                    Rs. ${transaction.amount}
                 </div>
 
-                <button
-                    class="delete-btn"
-                    data-id="${transaction.id}">
-                    Delete
-                </button>
+                <div class="transaction-right">
+
+                    <div class="amount">
+
+                        Rs. ${transaction.amount}
+
+                    </div>
+
+                    <div class="action-buttons">
+
+                        <button
+                            class="edit-btn"
+                            data-id="${transaction.id}">
+                            Edit
+                        </button>
+
+                        <button
+                            class="delete-btn"
+                            data-id="${transaction.id}">
+                            Delete
+                        </button>
+
+                    </div>
+
+                </div>
 
             </div>
 
-        </div>
+            `;
 
-    `)
+        })
         .join("");
 
-    const deleteButtons = document.querySelectorAll(".delete-btn");
+    // EDIT BUTTON
 
-    deleteButtons.forEach((button) => {
+    const editButtons =
+        document.querySelectorAll(".edit-btn");
+
+    editButtons.forEach(function (button) {
+
+        button.addEventListener("click", function () {
+
+            const id = Number(button.dataset.id);
+
+            editTransaction(id);
+
+        });
+
+    });
+
+    // DELETE BUTTON
+
+    const deleteButtons =
+        document.querySelectorAll(".delete-btn");
+
+    deleteButtons.forEach(function (button) {
 
         button.addEventListener("click", function () {
 
@@ -169,7 +231,7 @@ function renderTransactions() {
 
 }
 
-// Update Summary
+// UPDATE SUMMARY
 
 function updateSummary() {
 
@@ -187,7 +249,7 @@ function updateSummary() {
 
 }
 
-// Delete Transaction
+// DELETE TRANSACTION
 
 function deleteTransaction(id) {
 
@@ -199,35 +261,61 @@ function deleteTransaction(id) {
         return;
     }
 
-    transactions = transactions.filter(transaction => transaction.id !== id);
+    transactions = transactions.filter(
+        transaction => transaction.id !== id
+    );
 
     renderTransactions();
-
     updateSummary();
 
     showStatus("Transaction Deleted Successfully");
 
 }
 
-// Status Message
+// EDIT TRANSACTION
 
-function showStatus(message) {
+function editTransaction(id) {
 
-    statusMessage.textContent = message;
+    const transaction = transactions.find(
+        transaction => transaction.id === id
+    );
 
-    statusMessage.classList.add("show");
+    if (!transaction) return;
 
-    clearTimeout(showStatus.timeout);
+    amountInput.value = transaction.amount;
+    typeInput.value = transaction.type;
+    categoryInput.value = transaction.category;
+    dateInput.value = transaction.date;
+    noteInput.value = transaction.note;
 
-    showStatus.timeout = setTimeout(() => {
+    editId = id;
 
-        statusMessage.classList.remove("show");
+    addButton.textContent = "Update Transaction";
 
-    }, 1800);
+    cancelEditBtn.style.display = "block";
+
+    showStatus("Editing Transaction");
 
 }
 
-// Add Transaction
+
+// CANCEL EDIT
+
+cancelEditBtn.addEventListener("click", function () {
+
+    editId = null;
+
+    clearForm();
+
+    addButton.textContent = "Add Transaction";
+
+    cancelEditBtn.style.display = "none";
+
+    showStatus("Edit Cancelled");
+
+});
+
+// ADD / UPDATE TRANSACTION
 
 addButton.addEventListener("click", function () {
 
@@ -244,50 +332,78 @@ addButton.addEventListener("click", function () {
         note === ""
     ) {
 
-        showStatus("Please fill in all fields.");
+        showStatus("Please fill all fields.");
 
         return;
 
     }
 
-    const transaction = {
+    if (editId === null) {
 
-        id: Date.now(),
+        const transaction = {
 
-        amount: Number(amount),
+            id: Date.now(),
 
-        type: type,
+            amount: Number(amount),
 
-        category: category,
+            type: type,
 
-        date: date,
+            category: category,
 
-        note: note
+            date: date,
 
-    };
+            note: note
 
-    transactions.push(transaction);
+        };
+
+        transactions.push(transaction);
+
+        showStatus("Transaction Added Successfully");
+
+    }
+
+    else {
+
+        const index = transactions.findIndex(
+            transaction => transaction.id === editId
+        );
+
+        transactions[index] = {
+
+            id: editId,
+
+            amount: Number(amount),
+
+            type: type,
+
+            category: category,
+
+            date: date,
+
+            note: note
+
+        };
+
+        showStatus("Transaction Updated Successfully");
+
+        editId = null;
+
+        addButton.textContent = "Add Transaction";
+
+        cancelEditBtn.style.display = "none";
+
+    }
+
+    clearForm();
 
     renderTransactions();
 
     updateSummary();
 
-    showStatus(`Added ${type} of Rs. ${amount}`);
-
-    addButton.classList.remove("success-pulse");
-    void addButton.offsetWidth;
-    addButton.classList.add("success-pulse");
-
-    amountInput.value = "";
-    typeInput.value = "Income";
-    categoryInput.value = "";
-    dateInput.value = "";
-    noteInput.value = "";
-
 });
 
-
-// Initial Load
+// INITIAL LOAD
 
 renderTransactions();
+
 updateSummary();
