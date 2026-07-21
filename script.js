@@ -110,10 +110,12 @@ function animateCursor() {
 
 }
 
-function setCursorHover(active) {
+function setCursorHover(active, isInteractive) {
 
     cursorTrail.classList.toggle("hovering", active);
+    cursorTrail.classList.toggle("interactive", isInteractive);
     cursorCore.classList.toggle("hovering", active);
+    cursorCore.classList.toggle("interactive", isInteractive);
 
 }
 
@@ -123,13 +125,13 @@ function attachCursorHoverListeners(root = document) {
 
         element.addEventListener("mouseenter", function () {
 
-            setCursorHover(true);
+            setCursorHover(true, true);
 
         });
 
         element.addEventListener("mouseleave", function () {
 
-            setCursorHover(false);
+            setCursorHover(false, false);
 
         });
 
@@ -154,6 +156,10 @@ document.addEventListener("mousemove", function (event) {
     trailTargetX = event.clientX - dx * 0.65;
     trailTargetY = event.clientY - dy * 0.65;
     moveAngle = Math.atan2(dy, dx) || moveAngle;
+
+    if (Math.abs(dx) < 0.25 && Math.abs(dy) < 0.25) {
+        setCursorHover(false, false);
+    }
 
 });
 

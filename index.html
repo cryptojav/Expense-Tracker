@@ -2,120 +2,202 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
     <title>Expense Tracker</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-    <!-- Header -->
+    <!-- ================= HEADER ================= -->
+
     <header>
-        <span class="brand-badge">Finance Pulse</span>
-        <h1>Expense Tracker</h1>
-        <p>Track every rupee with a bold, modern look.</p>
+
+        <span class="brand-badge">
+            Finance Pulse
+        </span>
+
+        <h1>
+            Expense Tracker
+        </h1>
+
+        <p>
+            Track every rupee with a bold, modern look.
+        </p>
+
     </header>
 
     <main>
 
-        <!-- Summary Cards -->
+        <!-- ================= SUMMARY ================= -->
+
         <section class="summary">
 
             <div class="card">
+
                 <h3>Balance</h3>
-                <p id="balance">Rs. 0</p>
+
+                <p id="balance">
+                    Rs. 0
+                </p>
+
             </div>
 
             <div class="card">
+
                 <h3>Income</h3>
-                <p id="income">Rs. 0</p>
+
+                <p id="income">
+                    Rs. 0
+                </p>
+
             </div>
 
             <div class="card">
+
                 <h3>Expense</h3>
-                <p id="expense">Rs. 0</p>
+
+                <p id="expense">
+                    Rs. 0
+                </p>
+
             </div>
 
         </section>
 
-        <!-- Transaction Form -->
+        <!-- ================= TRANSACTION FORM ================= -->
+
         <section class="transaction-form">
 
-            <h2>Add Transaction</h2>
+            <h2>
+                Add Transaction
+            </h2>
 
             <!-- Amount -->
+
             <input
                 type="number"
                 id="amount"
                 placeholder="Enter Amount">
 
-            <!-- Income / Expense -->
+            <!-- Type -->
+
             <select id="type">
-                <option value="Income">Income</option>
-                <option value="Expense">Expense</option>
+
+                <option value="Income">
+                    Income
+                </option>
+
+                <option value="Expense">
+                    Expense
+                </option>
+
             </select>
 
             <!-- Category -->
+
             <input
                 type="text"
                 id="category"
                 placeholder="Enter Category">
 
             <!-- Date -->
+
             <input
                 type="date"
                 id="date">
 
             <!-- Note -->
+
             <textarea
                 id="note"
                 placeholder="Write a Note"></textarea>
 
-            <!-- Status Message -->
-            <p id="statusMessage" class="status-message"></p>
+            <!-- Status -->
 
-            <!-- Add / Update Button -->
+            <p
+                id="statusMessage"
+                class="status-message">
+            </p>
+
+            <!-- Add Button -->
+
             <button id="addBtn">
+
                 Add Transaction
+
             </button>
 
             <!-- Cancel Edit Button -->
+
             <button
                 id="cancelEditBtn"
                 style="display:none;">
+
                 Cancel Edit
+
             </button>
 
         </section>
 
-        <!-- Transactions -->
+        <!-- ================= TRANSACTIONS ================= -->
+
         <section class="transactions">
 
-            <h2>Transactions</h2>
+            <h2>
+                Transactions
+            </h2>
+
+            <!-- Search Box -->
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search by Category or Note...">
+
+            </div>
+
+            <!-- Transaction List -->
 
             <div id="transactionList">
 
                 <div class="empty-state">
-                    No transactions yet. Add your first transaction.
+
+                    No Transactions Yet
+
                 </div>
 
             </div>
 
         </section>
 
-        <!-- Analytics -->
+        <!-- ================= ANALYTICS ================= -->
+
         <section class="charts">
 
-            <h2>Analytics</h2>
+            <h2>
+                Analytics
+            </h2>
 
             <div class="chart-box">
+
                 Expense by Category
+
             </div>
 
             <div class="chart-box">
+
                 Monthly Expenses
+
             </div>
 
         </section>
