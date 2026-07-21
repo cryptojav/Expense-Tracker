@@ -37,58 +37,52 @@ body {
     }
 }
 
-.cursor-ring,
-.cursor-dot {
+.cursor-trail,
+.cursor-core {
     position: fixed;
     left: 0;
     top: 0;
     pointer-events: none;
     z-index: 9999;
     transform: translate(-50%, -50%);
+    will-change: transform, opacity;
 }
 
-.cursor-ring {
-    width: 38px;
-    height: 38px;
-    border: 1px solid rgba(180, 105, 255, 0.95);
-    border-radius: 50%;
-    transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 0 20px rgba(180, 105, 255, 0.24);
+.cursor-trail {
+    width: 82px;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.9) 18%, rgba(180, 105, 255, 0.86) 60%, transparent 100%);
+    box-shadow: 0 0 22px rgba(180, 105, 255, 0.24);
+    opacity: 0.82;
+    transition: width 180ms ease, opacity 180ms ease, transform 180ms ease;
 }
 
-.cursor-ring.hovering {
-    width: 56px;
-    height: 56px;
-    border-color: #dcbaff;
-    box-shadow: 0 0 28px rgba(180, 105, 255, 0.42);
+.cursor-trail.hovering {
+    width: 104px;
+    opacity: 0.95;
 }
 
-.cursor-dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #e0b7ff, var(--accent));
-    box-shadow: 0 0 16px rgba(180, 105, 255, 0.8);
-    transition: transform 0.12s ease, width 0.2s ease, height 0.2s ease;
+.cursor-core {
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.86);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(180, 105, 255, 0.94));
+    box-shadow: 0 0 18px rgba(180, 105, 255, 0.24);
+    transition: width 180ms ease, height 180ms ease, box-shadow 180ms ease, transform 180ms ease, opacity 180ms ease;
 }
 
-.cursor-dot.clicking {
-    width: 13px;
-    height: 13px;
+.cursor-core.hovering {
+    width: 18px;
+    height: 18px;
+    box-shadow: 0 0 24px rgba(180, 105, 255, 0.34);
 }
 
-.cursor-effect {
-    position: fixed;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(224, 183, 255, 0.95) 0%, rgba(180, 105, 255, 0.25) 48%, rgba(0, 0, 0, 0) 72%);
-    pointer-events: none;
-    z-index: 9998;
-    animation: spark 0.7s ease-out forwards;
-    transform: translate(-50%, -50%);
-    filter: blur(2px);
-    box-shadow: 0 0 24px rgba(180, 105, 255, 0.24);
+.cursor-core.clicking {
+    transform: translate(-50%, -50%) scale(0.85);
+    width: 12px;
+    height: 12px;
 }
 
 body::before,
@@ -596,4 +590,110 @@ textarea,
     .delete-btn {
         width: 100%;
     }
+}
+/* ================================================= */
+/* TRANSACTION ACTION BUTTONS */
+/* ================================================= */
+
+.transaction-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.edit-btn,
+.delete-btn {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.edit-btn {
+    background: #3b82f6;
+    color: white;
+}
+
+.edit-btn:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+}
+
+.delete-btn {
+    background: #ef4444;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+}
+
+/* ================================================= */
+/* CANCEL EDIT BUTTON */
+/* ================================================= */
+
+#cancelEditBtn {
+    width: 100%;
+    padding: 14px;
+    margin-top: 12px;
+    background: #6b7280;
+    color: white;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+#cancelEditBtn:hover {
+    background: #4b5563;
+    transform: translateY(-2px);
+}
+
+/* ================================================= */
+/* TRANSACTION HOVER */
+/* ================================================= */
+
+.transaction-item:hover {
+    border-color: rgba(255, 221, 0, 0.5);
+    box-shadow: 0 8px 25px rgba(255, 221, 0, 0.15);
+}
+
+/* ================================================= */
+/* MOBILE RESPONSIVE */
+/* ================================================= */
+
+@media (max-width: 768px) {
+
+    .transaction-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .transaction-right {
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .action-buttons {
+        width: 100%;
+        display: flex;
+    }
+
+    .edit-btn,
+    .delete-btn {
+        flex: 1;
+    }
+
 }

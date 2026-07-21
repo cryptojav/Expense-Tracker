@@ -1,5 +1,6 @@
-
+// ==========================================
 // INPUT FIELDS
+// ==========================================
 
 const amountInput = document.getElementById("amount");
 const typeInput = document.getElementById("type");
@@ -7,97 +8,170 @@ const categoryInput = document.getElementById("category");
 const dateInput = document.getElementById("date");
 const noteInput = document.getElementById("note");
 
+// ==========================================
 // BUTTONS
+// ==========================================
 
 const addButton = document.getElementById("addBtn");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
 
+// ==========================================
 // SUMMARY
+// ==========================================
 
 const balance = document.getElementById("balance");
 const income = document.getElementById("income");
 const expense = document.getElementById("expense");
 
+// ==========================================
 // TRANSACTION LIST
+// ==========================================
 
 const transactionList = document.getElementById("transactionList");
 const statusMessage = document.getElementById("statusMessage");
 
+// ==========================================
 // APP DATA
+// ==========================================
 
 let transactions = [];
-
-// stores id of transaction currently.
 let editId = null;
 
+// ==========================================
 // CUSTOM CURSOR
+// ==========================================
 
-const cursorRing = document.createElement("div");
-cursorRing.className = "cursor-ring";
-document.body.appendChild(cursorRing);
+const cursorTrail = document.createElement("div");
+cursorTrail.className = "cursor-trail";
+document.body.appendChild(cursorTrail);
 
-const cursorDot = document.createElement("div");
-cursorDot.className = "cursor-dot";
-document.body.appendChild(cursorDot);
+const cursorCore = document.createElement("div");
+cursorCore.className = "cursor-core";
+document.body.appendChild(cursorCore);
 
 let mouseX = window.innerWidth / 2;
 let mouseY = window.innerHeight / 2;
 
-let ringX = mouseX;
-let ringY = mouseY;
+let prevMouseX = mouseX;
+let prevMouseY = mouseY;
+
+let trailX = mouseX;
+let trailY = mouseY;
+let trailTargetX = mouseX;
+let trailTargetY = mouseY;
+let trailAngle = 0;
+let moveAngle = 0;
+
+const interactiveSelector = [
+    "button",
+    "a",
+    "input",
+    "select",
+    "textarea",
+    ".card",
+    ".transaction-item",
+    ".brand-badge",
+    ".chart-box",
+    ".empty-state",
+    ".action-buttons",
+    ".edit-btn",
+    ".delete-btn",
+    "[role='button']"
+].join(", ");
+
+function lerp(start, end, amount) {
+
+    return start + (end - start) * amount;
+
+}
+
+function lerpAngle(start, end, amount) {
+
+    const delta = ((end - start + Math.PI) % (Math.PI * 2)) - Math.PI;
+
+    return start + delta * amount;
+
+}
 
 function animateCursor() {
 
-    ringX += (mouseX - ringX) * 0.16;
-    ringY += (mouseY - ringY) * 0.16;
+    trailX = lerp(trailX, trailTargetX, 0.16);
+    trailY = lerp(trailY, trailTargetY, 0.16);
+    trailAngle = lerpAngle(trailAngle, moveAngle, 0.2);
 
-    cursorRing.style.left = `${ringX}px`;
-    cursorRing.style.top = `${ringY}px`;
+    cursorTrail.style.left = `${trailX}px`;
+    cursorTrail.style.top = `${trailY}px`;
+    cursorTrail.style.transform = `translate(-50%, -50%) rotate(${trailAngle}rad)`;
 
-    cursorDot.style.left = `${mouseX}px`;
-    cursorDot.style.top = `${mouseY}px`;
+    cursorCore.style.left = `${mouseX}px`;
+    cursorCore.style.top = `${mouseY}px`;
 
     requestAnimationFrame(animateCursor);
 
 }
 
+function setCursorHover(active) {
+
+    cursorTrail.classList.toggle("hovering", active);
+    cursorCore.classList.toggle("hovering", active);
+
+}
+
+function attachCursorHoverListeners(root = document) {
+
+    root.querySelectorAll(interactiveSelector).forEach(function (element) {
+
+        element.addEventListener("mouseenter", function () {
+
+            setCursorHover(true);
+
+        });
+
+        element.addEventListener("mouseleave", function () {
+
+            setCursorHover(false);
+
+        });
+
+    });
+
+}
+
 animateCursor();
+attachCursorHoverListeners();
 
 document.addEventListener("mousemove", function (event) {
+
+    const dx = event.clientX - prevMouseX;
+    const dy = event.clientY - prevMouseY;
 
     mouseX = event.clientX;
     mouseY = event.clientY;
 
-    const spark = document.createElement("span");
+    prevMouseX = event.clientX;
+    prevMouseY = event.clientY;
 
-    spark.className = "cursor-effect";
-
-    spark.style.left = `${event.clientX}px`;
-    spark.style.top = `${event.clientY}px`;
-
-    document.body.appendChild(spark);
-
-    setTimeout(function () {
-
-        spark.remove();
-
-    }, 650);
+    trailTargetX = event.clientX - dx * 0.65;
+    trailTargetY = event.clientY - dy * 0.65;
+    moveAngle = Math.atan2(dy, dx) || moveAngle;
 
 });
 
 document.addEventListener("mousedown", function () {
 
-    cursorDot.classList.add("clicking");
+    cursorCore.classList.add("clicking");
 
 });
 
 document.addEventListener("mouseup", function () {
 
-    cursorDot.classList.remove("clicking");
+    cursorCore.classList.remove("clicking");
 
 });
 
+// ==========================================
 // STATUS MESSAGE
+// ==========================================
 
 function showStatus(message) {
 
@@ -115,7 +189,9 @@ function showStatus(message) {
 
 }
 
+// ==========================================
 // CLEAR FORM
+// ==========================================
 
 function clearForm() {
 
@@ -127,7 +203,40 @@ function clearForm() {
 
 }
 
+// ==========================================
+// SAVE TO LOCAL STORAGE
+// ==========================================
+
+function saveTransactions() {
+
+    localStorage.setItem(
+        "transactions",
+        JSON.stringify(transactions)
+    );
+
+}
+
+// ==========================================
+// LOAD FROM LOCAL STORAGE
+// ==========================================
+
+function loadTransactions() {
+
+    const savedTransactions =
+        localStorage.getItem("transactions");
+
+    if (savedTransactions) {
+
+        transactions =
+            JSON.parse(savedTransactions);
+
+    }
+
+}
+
+// ==========================================
 // RENDER TRANSACTIONS
+// ==========================================
 
 function renderTransactions() {
 
@@ -195,43 +304,42 @@ function renderTransactions() {
         })
         .join("");
 
-    // EDIT BUTTON
+    attachCursorHoverListeners(transactionList);
 
-    const editButtons =
-        document.querySelectorAll(".edit-btn");
+    // EDIT BUTTONS
 
-    editButtons.forEach(function (button) {
+    document.querySelectorAll(".edit-btn")
+        .forEach(function (button) {
 
-        button.addEventListener("click", function () {
+            button.addEventListener("click", function () {
 
-            const id = Number(button.dataset.id);
+                editTransaction(
+                    Number(button.dataset.id)
+                );
 
-            editTransaction(id);
-
-        });
-
-    });
-
-    // DELETE BUTTON
-
-    const deleteButtons =
-        document.querySelectorAll(".delete-btn");
-
-    deleteButtons.forEach(function (button) {
-
-        button.addEventListener("click", function () {
-
-            const id = Number(button.dataset.id);
-
-            deleteTransaction(id);
+            });
 
         });
 
-    });
+    // DELETE BUTTONS
+
+    document.querySelectorAll(".delete-btn")
+        .forEach(function (button) {
+
+            button.addEventListener("click", function () {
+
+                deleteTransaction(
+                    Number(button.dataset.id)
+                );
+
+            });
+
+        });
 
 }
-
+// ==========================================
 // UPDATE SUMMARY
+// ==========================================
 
 function updateSummary() {
 
@@ -249,7 +357,9 @@ function updateSummary() {
 
 }
 
+// ==========================================
 // DELETE TRANSACTION
+// ==========================================
 
 function deleteTransaction(id) {
 
@@ -258,34 +368,47 @@ function deleteTransaction(id) {
     );
 
     if (!confirmDelete) {
+
         return;
+
     }
 
-    transactions = transactions.filter(
-        transaction => transaction.id !== id
-    );
+    transactions = transactions.filter(function (transaction) {
+
+        return transaction.id !== id;
+
+    });
+
+    saveTransactions();
 
     renderTransactions();
+
     updateSummary();
 
     showStatus("Transaction Deleted Successfully");
 
 }
 
+// ==========================================
 // EDIT TRANSACTION
+// ==========================================
 
 function editTransaction(id) {
 
-    const transaction = transactions.find(
-        transaction => transaction.id === id
-    );
+    const transaction = transactions.find(function (transaction) {
 
-    if (!transaction) return;
+        return transaction.id === id;
+
+    });
 
     amountInput.value = transaction.amount;
+
     typeInput.value = transaction.type;
+
     categoryInput.value = transaction.category;
+
     dateInput.value = transaction.date;
+
     noteInput.value = transaction.note;
 
     editId = id;
@@ -294,12 +417,11 @@ function editTransaction(id) {
 
     cancelEditBtn.style.display = "block";
 
-    showStatus("Editing Transaction");
-
 }
 
-
+// ==========================================
 // CANCEL EDIT
+// ==========================================
 
 cancelEditBtn.addEventListener("click", function () {
 
@@ -311,11 +433,11 @@ cancelEditBtn.addEventListener("click", function () {
 
     cancelEditBtn.style.display = "none";
 
-    showStatus("Edit Cancelled");
-
 });
 
+// ==========================================
 // ADD / UPDATE TRANSACTION
+// ==========================================
 
 addButton.addEventListener("click", function () {
 
@@ -364,9 +486,11 @@ addButton.addEventListener("click", function () {
 
     else {
 
-        const index = transactions.findIndex(
-            transaction => transaction.id === editId
-        );
+        const index = transactions.findIndex(function (transaction) {
+
+            return transaction.id === editId;
+
+        });
 
         transactions[index] = {
 
@@ -394,15 +518,27 @@ addButton.addEventListener("click", function () {
 
     }
 
-    clearForm();
+    saveTransactions();
 
     renderTransactions();
 
     updateSummary();
 
+    clearForm();
+
+    addButton.classList.remove("success-pulse");
+
+    void addButton.offsetWidth;
+
+    addButton.classList.add("success-pulse");
+
 });
 
+// ==========================================
 // INITIAL LOAD
+// ==========================================
+
+loadTransactions();
 
 renderTransactions();
 
