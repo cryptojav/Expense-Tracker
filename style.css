@@ -19,8 +19,15 @@
     box-sizing: border-box;
 }
 
+body,
+input,
+select,
+textarea,
+button {
+    font-family: "Inter", "Segoe UI", sans-serif;
+}
+
 body {
-    font-family: "Poppins", "Segoe UI", sans-serif;
     background:
         radial-gradient(circle at top left, rgba(16, 185, 129, 0.16), transparent 24%),
         radial-gradient(circle at bottom right, rgba(15, 23, 42, 0.84), transparent 24%),
