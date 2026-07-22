@@ -1,4 +1,4 @@
-// INPUT FIELDS
+//Input Fields
 
 const amountInput = document.getElementById("amount");
 const typeInput = document.getElementById("type");
@@ -6,32 +6,32 @@ const categoryInput = document.getElementById("category");
 const dateInput = document.getElementById("date");
 const noteInput = document.getElementById("note");
 
-// BUTTONS
+// Buttons
 
 const addButton = document.getElementById("addBtn");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
 
-// SUMMARY
+// Summary Section
 
 const balance = document.getElementById("balance");
 const income = document.getElementById("income");
 const expense = document.getElementById("expense");
 
-// STATISTICS DASHBOARD
+// Statistics and Insights
 
 const totalTransactions = document.getElementById("totalTransactions");
 const highestIncome = document.getElementById("highestIncome");
 const highestExpense = document.getElementById("highestExpense");
 const averageExpense = document.getElementById("averageExpense");
 
-// TRANSACTION LIST
+// Transaction List and Filters
 const transactionList = document.getElementById("transactionList");
 const statusMessage = document.getElementById("statusMessage");
 const searchInput = document.getElementById("searchInput");
 const filterType = document.getElementById("filterType");
 const filterCategory = document.getElementById("filterCategory");
 
-// BUDGET PLANNER
+// Budget Section
 
 const budgetInput = document.getElementById("budgetInput");
 const saveBudgetBtn = document.getElementById("saveBudgetBtn");
@@ -41,7 +41,7 @@ const remainingAmount = document.getElementById("remainingAmount");
 const progressFill = document.getElementById("progressFill");
 const budgetWarning = document.getElementById("budgetWarning");
 
-// APP DATA
+// App data
 
 let transactions = [];
 let editId = null;
@@ -296,7 +296,7 @@ function updateBudget() {
 
 }
 
-// CUSTOM CURSOR
+// Custom Cursor Implementation
 
 const cursorTrail = document.createElement("div");
 cursorTrail.className = "cursor-trail";
@@ -432,7 +432,7 @@ document.addEventListener("mouseup", function () {
 
 });
 
-// STATUS MESSAGE
+// Status message display
 
 function showStatus(message) {
 
@@ -450,7 +450,7 @@ function showStatus(message) {
 
 }
 
-// CLEAR FORM
+// Clear form fields
 
 function clearForm() {
 
@@ -461,7 +461,7 @@ function clearForm() {
     noteInput.value = "";
 
 }
-// SAVE TO LOCAL STORAGE
+//Save transactions to local storage
 
 function saveTransactions() {
 
@@ -472,7 +472,7 @@ function saveTransactions() {
 
 }
 
-// LOAD FROM LOCAL STORAGE
+// Load transactions and budget from local storage
 
 function loadTransactions() {
 
@@ -507,7 +507,7 @@ function loadTransactions() {
 }
 
 
-// RENDER TRANSACTIONS
+// render transactions
 
 function renderTransactions(searchText = "") {
 
@@ -624,7 +624,7 @@ function renderTransactions(searchText = "") {
         });
 
 }
-// UPDATE SUMMARY
+// update summary
 
 function updateSummary() {
 
@@ -642,7 +642,7 @@ function updateSummary() {
 
 }
 
-// UPDATE STATISTICS
+// update statistics
 
 function updateStatistics() {
 
@@ -702,7 +702,7 @@ function updateStatistics() {
 
 }
 
-// DELETE TRANSACTION
+// delete transaction
 
 function deleteTransaction(id) {
 
@@ -735,7 +735,7 @@ function deleteTransaction(id) {
 
 }
 
-// EDIT TRANSACTION
+// edit transaction
 
 function editTransaction(id) {
 
@@ -763,7 +763,8 @@ function editTransaction(id) {
 
 }
 
-// CANCEL EDIT
+// cancel edit transaction
+
 cancelEditBtn.addEventListener("click", function () {
 
     editId = null;
@@ -776,7 +777,7 @@ cancelEditBtn.addEventListener("click", function () {
 
 });
 
-//ADD / UPDATE TRANSACTION
+//add / update transaction
 
 
 addButton.addEventListener("click", function () {
@@ -877,9 +878,7 @@ addButton.addEventListener("click", function () {
 
 });
 
-// ==========================================
-// SAVE BUDGET
-// ==========================================
+//save budget
 
 saveBudgetBtn.addEventListener("click", function () {
 
@@ -893,9 +892,7 @@ saveBudgetBtn.addEventListener("click", function () {
 
 });
 
-// ==========================================
-// SEARCH TRANSACTIONS
-// ==========================================
+// search and filter events
 
 searchInput.addEventListener("keyup", function () {
 
@@ -915,9 +912,7 @@ filterCategory.addEventListener("change", function () {
 
 });
 
-// ==========================================
-// INITIAL LOAD
-// ==========================================
+// intial load
 
 loadTransactions();
 
