@@ -796,3 +796,78 @@ textarea,
     }
 
 }
+/* ==========================================
+   FILTER SECTION
+========================================== */
+
+.filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filters select {
+    flex: 1;
+    min-width: 180px;
+    padding: 12px 15px;
+    border: 1px solid rgba(255, 221, 0, 0.2);
+    border-radius: 12px;
+    background: #0d0d0d;
+    color: var(--text);
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filters select:hover {
+    border-color: rgba(255, 221, 0, 0.5);
+}
+
+.filters select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(255, 221, 0, 0.15);
+}
+
+/* ==========================================
+   FILTER LABELS
+========================================== */
+
+.filter-title {
+    color: var(--accent);
+    font-size: 14px;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+/* ==========================================
+   FILTER CONTAINER
+========================================== */
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 180px;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+========================================== */
+
+@media (max-width: 768px) {
+
+    .filters {
+        flex-direction: column;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    .filters select {
+        width: 100%;
+    }
+
+}

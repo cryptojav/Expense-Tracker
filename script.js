@@ -1,6 +1,4 @@
-// ==========================================
 // INPUT FIELDS
-// ==========================================
 
 const amountInput = document.getElementById("amount");
 const typeInput = document.getElementById("type");
@@ -8,39 +6,37 @@ const categoryInput = document.getElementById("category");
 const dateInput = document.getElementById("date");
 const noteInput = document.getElementById("note");
 
-// ==========================================
 // BUTTONS
-// ==========================================
 
 const addButton = document.getElementById("addBtn");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
 
-// ==========================================
 // SUMMARY
-// ==========================================
 
 const balance = document.getElementById("balance");
 const income = document.getElementById("income");
 const expense = document.getElementById("expense");
 
-// ==========================================
-// TRANSACTION LIST
-// ==========================================
+// STATISTICS DASHBOARD
 
+const totalTransactions = document.getElementById("totalTransactions");
+const highestIncome = document.getElementById("highestIncome");
+const highestExpense = document.getElementById("highestExpense");
+const averageExpense = document.getElementById("averageExpense");
+
+// TRANSACTION LIST
 const transactionList = document.getElementById("transactionList");
 const statusMessage = document.getElementById("statusMessage");
 const searchInput = document.getElementById("searchInput");
+const filterType = document.getElementById("filterType");
+const filterCategory = document.getElementById("filterCategory");
 
-// ==========================================
 // APP DATA
-// ==========================================
 
 let transactions = [];
 let editId = null;
 
-// ==========================================
 // CUSTOM CURSOR
-// ==========================================
 
 const cursorTrail = document.createElement("div");
 cursorTrail.className = "cursor-trail";
@@ -176,9 +172,7 @@ document.addEventListener("mouseup", function () {
 
 });
 
-// ==========================================
 // STATUS MESSAGE
-// ==========================================
 
 function showStatus(message) {
 
@@ -196,9 +190,7 @@ function showStatus(message) {
 
 }
 
-// ==========================================
 // CLEAR FORM
-// ==========================================
 
 function clearForm() {
 
@@ -209,10 +201,7 @@ function clearForm() {
     noteInput.value = "";
 
 }
-
-// ==========================================
 // SAVE TO LOCAL STORAGE
-// ==========================================
 
 function saveTransactions() {
 
@@ -223,9 +212,7 @@ function saveTransactions() {
 
 }
 
-// ==========================================
 // LOAD FROM LOCAL STORAGE
-// ==========================================
 
 function loadTransactions() {
 
@@ -239,25 +226,36 @@ function loadTransactions() {
 
     }
 
+    updateStatistics();
+
 }
 
-// ==========================================
+
 // RENDER TRANSACTIONS
-// ==========================================
 
 function renderTransactions(searchText = "") {
 
+    const search = searchText.toLowerCase();
+    const selectedType = filterType.value;
+    const selectedCategory = filterCategory.value;
+
     let filteredTransactions = transactions.filter(function (transaction) {
 
-        return (
-            transaction.category
-                .toLowerCase()
-                .includes(searchText.toLowerCase()) ||
+        const matchesSearch =
+            transaction.category.toLowerCase().includes(search) ||
+            transaction.note.toLowerCase().includes(search);
 
-            transaction.note
-                .toLowerCase()
-                .includes(searchText.toLowerCase())
-        );
+        const matchesType =
+            selectedType === "All" ||
+            transaction.type === selectedType;
+
+        const matchesCategory =
+            selectedCategory === "All" ||
+            transaction.category === selectedCategory;
+
+        return matchesSearch &&
+            matchesType &&
+            matchesCategory;
 
     });
 
@@ -350,9 +348,7 @@ function renderTransactions(searchText = "") {
         });
 
 }
-// ==========================================
 // UPDATE SUMMARY
-// ==========================================
 
 function updateSummary() {
 
@@ -370,9 +366,67 @@ function updateSummary() {
 
 }
 
-// ==========================================
+// UPDATE STATISTICS
+
+function updateStatistics() {
+
+    const incomeTransactions = transactions.filter(function (transaction) {
+
+        return transaction.type === "Income";
+
+    });
+
+    const expenseTransactions = transactions.filter(function (transaction) {
+
+        return transaction.type === "Expense";
+
+    });
+
+    const highestIncomeAmount = incomeTransactions.length > 0
+        ? Math.max(...incomeTransactions.map(function (transaction) {
+            return transaction.amount;
+        }))
+        : 0;
+
+    const highestExpenseAmount = expenseTransactions.length > 0
+        ? Math.max(...expenseTransactions.map(function (transaction) {
+            return transaction.amount;
+        }))
+        : 0;
+
+    const averageExpenseAmount = expenseTransactions.length > 0
+        ? expenseTransactions.reduce(function (sum, transaction) {
+            return sum + transaction.amount;
+        }, 0) / expenseTransactions.length
+        : 0;
+
+    if (totalTransactions) {
+
+        totalTransactions.textContent = transactions.length;
+
+    }
+
+    if (highestIncome) {
+
+        highestIncome.textContent = `Rs. ${highestIncomeAmount}`;
+
+    }
+
+    if (highestExpense) {
+
+        highestExpense.textContent = `Rs. ${highestExpenseAmount}`;
+
+    }
+
+    if (averageExpense) {
+
+        averageExpense.textContent = `Rs. ${averageExpenseAmount}`;
+
+    }
+
+}
+
 // DELETE TRANSACTION
-// ==========================================
 
 function deleteTransaction(id) {
 
@@ -397,14 +451,13 @@ function deleteTransaction(id) {
     renderTransactions();
 
     updateSummary();
+    updateStatistics();
 
     showStatus("Transaction Deleted Successfully");
 
 }
 
-// ==========================================
 // EDIT TRANSACTION
-// ==========================================
 
 function editTransaction(id) {
 
@@ -432,10 +485,7 @@ function editTransaction(id) {
 
 }
 
-// ==========================================
 // CANCEL EDIT
-// ==========================================
-
 cancelEditBtn.addEventListener("click", function () {
 
     editId = null;
@@ -448,9 +498,8 @@ cancelEditBtn.addEventListener("click", function () {
 
 });
 
-// ==========================================
-// ADD / UPDATE TRANSACTION
-// ==========================================
+//ADD / UPDATE TRANSACTION
+
 
 addButton.addEventListener("click", function () {
 
@@ -536,6 +585,7 @@ addButton.addEventListener("click", function () {
     renderTransactions();
 
     updateSummary();
+    updateStatistics();
 
     clearForm();
 
@@ -552,6 +602,18 @@ addButton.addEventListener("click", function () {
 // ==========================================
 
 searchInput.addEventListener("keyup", function () {
+
+    renderTransactions(searchInput.value);
+
+});
+
+filterType.addEventListener("change", function () {
+
+    renderTransactions(searchInput.value);
+
+});
+
+filterCategory.addEventListener("change", function () {
 
     renderTransactions(searchInput.value);
 
