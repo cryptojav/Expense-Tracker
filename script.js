@@ -31,10 +31,270 @@ const searchInput = document.getElementById("searchInput");
 const filterType = document.getElementById("filterType");
 const filterCategory = document.getElementById("filterCategory");
 
+// BUDGET PLANNER
+
+const budgetInput = document.getElementById("budgetInput");
+const saveBudgetBtn = document.getElementById("saveBudgetBtn");
+const budgetAmount = document.getElementById("budgetAmount");
+const spentAmount = document.getElementById("spentAmount");
+const remainingAmount = document.getElementById("remainingAmount");
+const progressFill = document.getElementById("progressFill");
+const budgetWarning = document.getElementById("budgetWarning");
+
 // APP DATA
 
 let transactions = [];
 let editId = null;
+let monthlyBudget = 0;
+
+// CHARTS
+
+let categoryChart;
+let monthlyChart;
+
+function drawCategoryChart() {
+
+    if (categoryChart) {
+
+        categoryChart.destroy();
+
+    }
+
+    const expenseTransactions = transactions.filter(function (transaction) {
+
+        return transaction.type === "Expense";
+
+    });
+
+    if (expenseTransactions.length === 0) {
+
+        return;
+
+    }
+
+    const categoryTotals = {};
+
+    expenseTransactions.forEach(function (transaction) {
+
+        if (!categoryTotals[transaction.category]) {
+
+            categoryTotals[transaction.category] = 0;
+
+        }
+
+        categoryTotals[transaction.category] += transaction.amount;
+
+    });
+
+    const labels = Object.keys(categoryTotals);
+    const data = Object.values(categoryTotals);
+    const colors = [
+        "#ff6b6b",
+        "#4ecdc4",
+        "#45b7d1",
+        "#f9c74f",
+        "#90be6d",
+        "#ff9f1c",
+        "#a78bfa",
+        "#fb7185"
+    ];
+
+    const ctx = document.getElementById("categoryChart").getContext("2d");
+
+    categoryChart = new Chart(ctx, {
+
+        type: "doughnut",
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: colors.slice(0, labels.length),
+                borderColor: "#ffffff",
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: "bottom"
+                }
+            }
+        }
+    });
+
+}
+
+function drawMonthlyChart() {
+
+    if (monthlyChart) {
+
+        monthlyChart.destroy();
+
+    }
+
+    const expenseTransactions = transactions.filter(function (transaction) {
+
+        return transaction.type === "Expense";
+
+    });
+
+    if (expenseTransactions.length === 0) {
+
+        return;
+
+    }
+
+    const monthlyTotals = {};
+
+    expenseTransactions.forEach(function (transaction) {
+
+        const monthLabel = new Date(transaction.date).toLocaleString("en-US", {
+            month: "short",
+            year: "numeric"
+        });
+
+        if (!monthlyTotals[monthLabel]) {
+
+            monthlyTotals[monthLabel] = 0;
+
+        }
+
+        monthlyTotals[monthLabel] += transaction.amount;
+
+    });
+
+    const labels = Object.keys(monthlyTotals);
+    const data = Object.values(monthlyTotals);
+
+    const ctx = document.getElementById("monthlyChart").getContext("2d");
+
+    monthlyChart = new Chart(ctx, {
+
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Monthly Expense",
+                data: data,
+                backgroundColor: "#ff6b6b",
+                borderColor: "#ff4d4d",
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+}
+
+function refreshCharts() {
+
+    drawCategoryChart();
+    drawMonthlyChart();
+
+}
+
+function updateBudget() {
+
+    const totalExpense = transactions
+        .filter(function (transaction) {
+            return transaction.type === "Expense";
+        })
+        .reduce(function (sum, transaction) {
+            return sum + transaction.amount;
+        }, 0);
+
+    const remainingBudget = monthlyBudget - totalExpense;
+    const budgetUsed = monthlyBudget > 0
+        ? (totalExpense / monthlyBudget) * 100
+        : 0;
+    const percentage = Math.min(100, Math.max(0, budgetUsed));
+
+    if (budgetAmount) {
+
+        budgetAmount.textContent = `Rs. ${monthlyBudget}`;
+
+    }
+
+    if (spentAmount) {
+
+        spentAmount.textContent = `Rs. ${totalExpense}`;
+
+    }
+
+    if (remainingAmount) {
+
+        remainingAmount.textContent = `Rs. ${remainingBudget}`;
+
+    }
+
+    if (progressFill) {
+
+        progressFill.style.width = `${percentage}%`;
+
+        if (percentage <= 60) {
+
+            progressFill.style.backgroundColor = "#4caf50";
+
+        }
+
+        else if (percentage <= 90) {
+
+            progressFill.style.backgroundColor = "#f4b400";
+
+        }
+
+        else {
+
+            progressFill.style.backgroundColor = "#f44336";
+
+        }
+
+    }
+
+    if (budgetWarning) {
+
+        if (monthlyBudget === 0) {
+
+            budgetWarning.textContent = "No Budget Set";
+
+        }
+
+        else if (totalExpense < monthlyBudget) {
+
+            budgetWarning.textContent = `You still have Rs. ${remainingBudget} remaining.`;
+
+        }
+
+        else if (totalExpense === monthlyBudget) {
+
+            budgetWarning.textContent = "You have reached your budget.";
+
+        }
+
+        else {
+
+            budgetWarning.textContent = `Budget Exceeded by Rs. ${Math.abs(remainingBudget)}`;
+
+        }
+
+    }
+
+}
 
 // CUSTOM CURSOR
 
@@ -219,6 +479,8 @@ function loadTransactions() {
     const savedTransactions =
         localStorage.getItem("transactions");
 
+    const savedBudget = localStorage.getItem("monthlyBudget");
+
     if (savedTransactions) {
 
         transactions =
@@ -226,7 +488,21 @@ function loadTransactions() {
 
     }
 
+    if (savedBudget !== null) {
+
+        monthlyBudget = Number(savedBudget);
+
+        if (budgetInput) {
+
+            budgetInput.value = monthlyBudget;
+
+        }
+
+    }
+
     updateStatistics();
+    refreshCharts();
+    updateBudget();
 
 }
 
@@ -452,6 +728,8 @@ function deleteTransaction(id) {
 
     updateSummary();
     updateStatistics();
+    refreshCharts();
+    updateBudget();
 
     showStatus("Transaction Deleted Successfully");
 
@@ -586,6 +864,8 @@ addButton.addEventListener("click", function () {
 
     updateSummary();
     updateStatistics();
+    refreshCharts();
+    updateBudget();
 
     clearForm();
 
@@ -594,6 +874,22 @@ addButton.addEventListener("click", function () {
     void addButton.offsetWidth;
 
     addButton.classList.add("success-pulse");
+
+});
+
+// ==========================================
+// SAVE BUDGET
+// ==========================================
+
+saveBudgetBtn.addEventListener("click", function () {
+
+    monthlyBudget = Number(budgetInput.value) || 0;
+
+    localStorage.setItem("monthlyBudget", monthlyBudget);
+
+    updateBudget();
+
+    showStatus("Budget Saved Successfully");
 
 });
 

@@ -41,44 +41,49 @@
         <section class="summary">
 
             <div class="card">
-
                 <h3>Balance</h3>
-
-                <p id="balance">
-
-                    Rs. 0
-
-                </p>
-
+                <p id="balance">Rs. 0</p>
             </div>
 
             <div class="card">
-
                 <h3>Income</h3>
-
-                <p id="income">
-
-                    Rs. 0
-
-                </p>
-
+                <p id="income">Rs. 0</p>
             </div>
 
             <div class="card">
-
                 <h3>Expense</h3>
-
-                <p id="expense">
-
-                    Rs. 0
-
-                </p>
-
+                <p id="expense">Rs. 0</p>
             </div>
 
         </section>
 
-        <!-- ================= FORM ================= -->
+        <!-- ================= STATISTICS ================= -->
+
+        <section class="statistics">
+
+            <div class="card">
+                <h3>Total Transactions</h3>
+                <p id="totalTransactions">0</p>
+            </div>
+
+            <div class="card">
+                <h3>Highest Income</h3>
+                <p id="highestIncome">Rs. 0</p>
+            </div>
+
+            <div class="card">
+                <h3>Highest Expense</h3>
+                <p id="highestExpense">Rs. 0</p>
+            </div>
+
+            <div class="card">
+                <h3>Average Expense</h3>
+                <p id="averageExpense">Rs. 0</p>
+            </div>
+
+        </section>
+
+        <!-- ================= ADD TRANSACTION ================= -->
 
         <section class="transaction-form">
 
@@ -91,9 +96,13 @@
 
             <select id="type">
 
-                <option value="Income">Income</option>
+                <option value="Income">
+                    Income
+                </option>
 
-                <option value="Expense">Expense</option>
+                <option value="Expense">
+                    Expense
+                </option>
 
             </select>
 
@@ -116,17 +125,13 @@
             </p>
 
             <button id="addBtn">
-
                 Add Transaction
-
             </button>
 
             <button
                 id="cancelEditBtn"
                 style="display:none;">
-
                 Cancel Edit
-
             </button>
 
         </section>
@@ -141,7 +146,7 @@
 
             </h2>
 
-            <!-- SEARCH -->
+            <!-- Search -->
 
             <div class="search-box">
 
@@ -152,11 +157,9 @@
 
             </div>
 
-            <!-- FILTERS -->
+            <!-- Filters -->
 
             <div class="filters">
-
-                <!-- TYPE FILTER -->
 
                 <div class="filter-group">
 
@@ -169,28 +172,20 @@
                     <select id="filterType">
 
                         <option value="All">
-
                             All
-
                         </option>
 
                         <option value="Income">
-
                             Income
-
                         </option>
 
                         <option value="Expense">
-
                             Expense
-
                         </option>
 
                     </select>
 
                 </div>
-
-                <!-- CATEGORY FILTER -->
 
                 <div class="filter-group">
 
@@ -203,64 +198,19 @@
                     <select id="filterCategory">
 
                         <option value="All">
-
                             All Categories
-
                         </option>
 
-                        <option value="Food">
-
-                            Food
-
-                        </option>
-
-                        <option value="Shopping">
-
-                            Shopping
-
-                        </option>
-
-                        <option value="Transport">
-
-                            Transport
-
-                        </option>
-
-                        <option value="Salary">
-
-                            Salary
-
-                        </option>
-
-                        <option value="Bills">
-
-                            Bills
-
-                        </option>
-
-                        <option value="Entertainment">
-
-                            Entertainment
-
-                        </option>
-
-                        <option value="Health">
-
-                            Health
-
-                        </option>
-
-                        <option value="Education">
-
-                            Education
-
-                        </option>
-
-                        <option value="Others">
-
-                            Others
-
-                        </option>
+                        <option value="Food">Food</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Salary">Salary</option>
+                        <option value="Bills">Bills</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Health">Health</option>
+                        <option value="Education">Education</option>
+                        <option value="Business">Business</option>
+                        <option value="Others">Others</option>
 
                     </select>
 
@@ -268,7 +218,7 @@
 
             </div>
 
-            <!-- TRANSACTION LIST -->
+            <!-- Transaction List -->
 
             <div id="transactionList">
 
@@ -282,31 +232,103 @@
 
         </section>
 
-        <!-- ================= ANALYTICS ================= -->
+        <!-- ================= MONTHLY BUDGET PLANNER ================= -->
+
+        <section class="budget-planner">
+
+            <h2>Monthly Budget Planner</h2>
+
+            <input
+                type="number"
+                id="budgetInput"
+                placeholder="Enter Monthly Budget">
+
+            <button id="saveBudgetBtn">
+                Save Budget
+            </button>
+
+            <div class="card">
+                <h3>Budget</h3>
+                <p id="budgetAmount">Rs. 0</p>
+            </div>
+
+            <div class="card">
+                <h3>Spent</h3>
+                <p id="spentAmount">Rs. 0</p>
+            </div>
+
+            <div class="card">
+                <h3>Remaining</h3>
+                <p id="remainingAmount">Rs. 0</p>
+            </div>
+
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill"></div>
+            </div>
+
+            <div id="budgetWarning" class="budget-warning">
+                No Budget Set
+            </div>
+
+        </section>
+
+        <!-- ================= ANALYTICS DASHBOARD ================= -->
 
         <section class="charts">
 
-            <h2>
+            <h2 class="analytics-title">
 
-                Analytics
+                Analytics Dashboard
 
             </h2>
 
-            <div class="chart-box">
+            <p class="analytics-subtitle">
 
-                Expense by Category
+                Visualize your financial data with interactive charts.
 
-            </div>
+            </p>
 
-            <div class="chart-box">
+            <div class="chart-container">
 
-                Monthly Expenses
+                <!-- Doughnut Chart -->
+
+                <div class="chart-card">
+
+                    <h3>
+
+                        Expense by Category
+
+                    </h3>
+
+                    <canvas id="categoryChart"></canvas>
+
+                </div>
+
+                <!-- Bar Chart -->
+
+                <div class="chart-card">
+
+                    <h3>
+
+                        Monthly Expenses
+
+                    </h3>
+
+                    <canvas id="monthlyChart"></canvas>
+
+                </div>
 
             </div>
 
         </section>
 
     </main>
+
+    <!-- Chart.js -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- JavaScript -->
 
     <script src="script.js"></script>
 
