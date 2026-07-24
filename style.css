@@ -1200,6 +1200,7 @@ textarea,
 }
 
 .search-group,
+.toolbar-controls,
 .sort-group {
     display: flex;
     flex-direction: column;
@@ -1209,6 +1210,84 @@ textarea,
 .search-group {
     flex: 1;
     min-width: 280px;
+}
+
+.toolbar-controls {
+    flex: 1;
+    min-width: 280px;
+    gap: 14px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(255, 221, 0, 0.12), rgba(16, 185, 129, 0.08));
+    border: 1px solid rgba(255, 221, 0, 0.24);
+    box-shadow: 0 10px 24px rgba(2, 6, 23, 0.16);
+    backdrop-filter: blur(10px);
+}
+
+.actions-title {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.export-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.export-btn {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 14px;
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(2, 6, 23, 0.22);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.export-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 26px rgba(2, 6, 23, 0.28);
+    filter: brightness(1.04);
+}
+
+.export-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.export-btn-pdf {
+    background: linear-gradient(135deg, #f97316, #ef4444);
+}
+
+.export-btn-csv {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.export-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.45s ease;
+}
+
+.export-btn:hover::before {
+    transform: translateX(100%);
 }
 
 .sort-title {
@@ -1286,12 +1365,17 @@ textarea,
     }
 
     .search-group,
+    .toolbar-controls,
     .sort-group {
         width: 100%;
     }
 
     .sort-group select {
         width: 100%;
+    }
+
+    .export-buttons {
+        grid-template-columns: 1fr;
     }
 
 }

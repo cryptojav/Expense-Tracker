@@ -175,26 +175,54 @@
                     </div>
                 </div>
 
-                <div class="sort-group">
+                <div class="toolbar-controls">
 
-                    <label
-                        class="sort-title"
-                        for="sortSelect">
-                        Sort By
-                    </label>
+                    <div class="actions">
 
-                    <select id="sortSelect">
+                        <div class="actions-title">
+                            Actions
+                        </div>
 
-                        <option value="newest">Newest First</option>
-                        <option value="oldest">Oldest First</option>
-                        <option value="highest">Highest Amount</option>
-                        <option value="lowest">Lowest Amount</option>
-                        <option value="income">Income First</option>
-                        <option value="expense">Expense First</option>
-                        <option value="az">Category A-Z</option>
-                        <option value="za">Category Z-A</option>
+                        <div class="export-buttons">
 
-                    </select>
+                            <button
+                                id="exportPdfBtn"
+                                class="export-btn export-btn-pdf">
+                                📄 Export PDF
+                            </button>
+
+                            <button
+                                id="exportCsvBtn"
+                                class="export-btn export-btn-csv">
+                                📊 Export CSV
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="sort-group">
+
+                        <label
+                            class="sort-title"
+                            for="sortSelect">
+                            Sort By
+                        </label>
+
+                        <select id="sortSelect">
+
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="highest">Highest Amount</option>
+                            <option value="lowest">Lowest Amount</option>
+                            <option value="income">Income First</option>
+                            <option value="expense">Expense First</option>
+                            <option value="az">Category A-Z</option>
+                            <option value="za">Category Z-A</option>
+
+                        </select>
+
+                    </div>
 
                 </div>
 
@@ -375,6 +403,8 @@
                     <!-- ==== Chart.js ==== -->
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
                      <!-- ==== JavaScript ==== -->
 
