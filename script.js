@@ -30,6 +30,7 @@ const statusMessage = document.getElementById("statusMessage");
 const searchInput = document.getElementById("searchInput");
 const filterType = document.getElementById("filterType");
 const filterCategory = document.getElementById("filterCategory");
+const sortSelect = document.getElementById("sortSelect");
 
 // Budget Section
 
@@ -480,6 +481,7 @@ function loadTransactions() {
         localStorage.getItem("transactions");
 
     const savedBudget = localStorage.getItem("monthlyBudget");
+    const savedSortOption = localStorage.getItem("sortOption");
 
     if (savedTransactions) {
 
@@ -500,11 +502,65 @@ function loadTransactions() {
 
     }
 
+    if (savedSortOption && sortSelect) {
+
+        sortSelect.value = savedSortOption;
+
+    }
+
     updateStatistics();
     refreshCharts();
     updateBudget();
 
 }
+// sort transactions
+
+function sortTransactions(list) {
+
+    const sorted = [...list];
+    const selectedSort = sortSelect.value;
+
+    sorted.sort(function (firstTransaction, secondTransaction) {
+
+        switch (selectedSort) {
+
+            case "oldest":
+                return firstTransaction.id - secondTransaction.id;
+
+            case "highest":
+                return secondTransaction.amount - firstTransaction.amount;
+
+            case "lowest":
+                return firstTransaction.amount - secondTransaction.amount;
+
+            case "income":
+                return firstTransaction.type === secondTransaction.type
+                    ? secondTransaction.id - firstTransaction.id
+                    : firstTransaction.type === "Income" ? -1 : 1;
+
+            case "expense":
+                return firstTransaction.type === secondTransaction.type
+                    ? secondTransaction.id - firstTransaction.id
+                    : firstTransaction.type === "Expense" ? -1 : 1;
+
+            case "az":
+                return firstTransaction.category.localeCompare(secondTransaction.category);
+
+            case "za":
+                return secondTransaction.category.localeCompare(firstTransaction.category);
+
+            case "newest":
+            default:
+                return secondTransaction.id - firstTransaction.id;
+
+        }
+
+    });
+
+    return sorted;
+
+}
+
 
 
 // render transactions
@@ -547,9 +603,7 @@ function renderTransactions(searchText = "") {
 
     }
 
-    transactionList.innerHTML = filteredTransactions
-        .slice()
-        .reverse()
+    transactionList.innerHTML = sortTransactions(filteredTransactions)
         .map(function (transaction) {
 
             return `
@@ -907,6 +961,14 @@ filterType.addEventListener("change", function () {
 });
 
 filterCategory.addEventListener("change", function () {
+
+    renderTransactions(searchInput.value);
+
+});
+
+sortSelect.addEventListener("change", function () {
+
+    localStorage.setItem("sortOption", sortSelect.value);
 
     renderTransactions(searchInput.value);
 

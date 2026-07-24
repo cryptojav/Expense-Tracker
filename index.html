@@ -10,6 +10,9 @@
 
     <title>Expense Tracker</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 
 </head>
@@ -92,9 +95,10 @@
             <input
                 type="number"
                 id="amount"
+                class="input-field"
                 placeholder="Enter Amount">
 
-            <select id="type">
+            <select id="type" class="input-field">
 
                 <option value="Income">
                     Income
@@ -109,14 +113,17 @@
             <input
                 type="text"
                 id="category"
+                class="input-field"
                 placeholder="Enter Category">
 
             <input
                 type="date"
-                id="date">
+                id="date"
+                class="input-field">
 
             <textarea
                 id="note"
+                class="input-field"
                 placeholder="Write a Note"></textarea>
 
             <p
@@ -146,14 +153,50 @@
 
             </h2>
 
-                       <!-- ==== Search ==== -->
+                       <!-- ==== Search and Sort ==== -->
 
-            <div class="search-box">
+            <div class="transaction-toolbar">
 
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Search by Category or Note...">
+                <div class="search-group">
+
+                    <label
+                        class="sort-title"
+                        for="searchInput">
+                        Search Transactions
+                    </label>
+
+                    <div class="search-box">
+
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Search by Category or Note...">
+
+                    </div>
+                </div>
+
+                <div class="sort-group">
+
+                    <label
+                        class="sort-title"
+                        for="sortSelect">
+                        Sort By
+                    </label>
+
+                    <select id="sortSelect">
+
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="highest">Highest Amount</option>
+                        <option value="lowest">Lowest Amount</option>
+                        <option value="income">Income First</option>
+                        <option value="expense">Expense First</option>
+                        <option value="az">Category A-Z</option>
+                        <option value="za">Category Z-A</option>
+
+                    </select>
+
+                </div>
 
             </div>
 
@@ -238,14 +281,19 @@
 
             <h2>Monthly Budget Planner</h2>
 
-            <input
-                type="number"
-                id="budgetInput"
-                placeholder="Enter Monthly Budget">
+            <div class="budget-input-group">
 
-            <button id="saveBudgetBtn">
-                Save Budget
-            </button>
+                <input
+                    type="number"
+                    id="budgetInput"
+                    class="input-field"
+                    placeholder="Enter Monthly Budget">
+
+                <button id="saveBudgetBtn">
+                    Save Budget
+                </button>
+
+            </div>
 
             <div class="card">
                 <h3>Budget</h3>
